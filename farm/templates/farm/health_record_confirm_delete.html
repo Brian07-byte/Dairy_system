@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Delete Health Record</h3>
+            <p>Are you sure you want to delete this health record?</p>
+            
+            <div class="mb-3">
+                <strong>Cow:</strong> {{ health_record.cow }}<br>
+                <strong>Date:</strong> {{ health_record.date }}<br>
+                <strong>Condition:</strong> {{ health_record.condition }}
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a href="{% url 'farm:health_record_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

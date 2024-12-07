@@ -1,0 +1,18 @@
+<!-- templates/accounts/logout.html -->
+{% extends 'base.html' %}
+
+{% block title %}Logged Out - Dairy Farming System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h2>You have been logged out</h2>
+                <p>Thanks for visiting!</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Login Again</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

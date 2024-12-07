@@ -1,0 +1,125 @@
+<!-- templates/farm/cattle_detail.html -->
+{% extends "farm/base.html" %}
+
+{% block farm_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ cattle.name }} ({{ cattle.tag_number }})</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'cattle_list' %}" class="btn btn-secondary mr-2">Back to List</a>
+        <a href="#" class="btn btn-primary">Edit Cattle</a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Cattle Details -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Cattle Information</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Breed:</th>
+                        <td>{{ cattle.breed }}</td>
+                    </tr>
+                    <tr>
+                        <th>Gender:</th>
+                        <td>{{ cattle.get_gender_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date of Birth:</th>
+                        <td>{{ cattle.date_of_birth }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>{{ cattle.get_status_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Weight:</th>
+                        <td>{{ cattle.weight }} kg</td>
+                    </tr>
+                    <tr>
+                        <th>Notes:</th>
+                        <td>{{ cattle.notes|linebreaks }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Milk Production -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Recent Milk Production</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Morning</th>
+                            <th>Evening</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in milk_records %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.morning_amount }}</td>
+                            <td>{{ record.evening_amount }}</td>
+                            <td>{{ record.total_amount }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No milk production records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Records -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Health Records</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Vet Name</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in health_records %}
+                        <tr>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.get_record_type_display }}</td>
+                            <td>{{ record.description|truncatechars:50 }}</td>
+                            <td>{{ record.vet_name }}</td>
+                            <td>${{ record.cost }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No health records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+<!-- farm/templates/farm/notifications_list.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h2>Notifications</h2>
+            
+            {% if notifications %}
+                <div class="mb-3">
+                    <a href="?mark_all_read=1" class="btn btn-secondary">Mark All as Read</a>
+                </div>
+                
+                {% for notification in notifications %}
+                    <div class="card mb-3 {% if not notification.read_at %}border-primary{% endif %}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title">{{ notification.title }}</h5>
+                                <small class="text-muted">
+                                    {{ notification.created_at|timesince }} ago
+                                </small>
+                            </div>
+                            <p class="card-text">{{ notification.message }}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                {% if notification.related_url %}
+                                    <a href="{{ notification.related_url }}" class="btn btn-sm btn-primary">View Details</a>
+                                {% endif %}
+                                
+                                <div class="btn-group">
+                                    {% if not notification.read_at %}
+                                        <form action="{% url 'mark_notification_read' notification.id %}" method="post" class="d-inline mark-read-form" data-notification-id="{{ notification.id }}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-success">Mark as Read</button>
+                                        </form>
+                                    {% endif %}
+                                    <form action="{% url 'delete_notification' notification.id %}" method="post" class="d-inline delete-notification-form" data-notification-id="{{ notification.id }}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                
+                {% include 'farm/includes/pagination.html' with page_obj=notifications %}
+            {% else %}
+                <div class="alert alert-info">
+                    No notifications to display.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'farm/js/notifications.js' %}"></script>
+{% endblock %}

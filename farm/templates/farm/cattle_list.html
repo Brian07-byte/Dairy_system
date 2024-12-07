@@ -1,0 +1,97 @@
+<!-- templates/farm/cattle_list.html -->
+{% extends "farm/base.html" %}
+
+{% block farm_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Cattle Management</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'cattle_add' %}" class="btn btn-primary">Add New Cattle</a>
+    </div>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <form method="get" class="form-inline">
+            <div class="input-group w-100">
+                <input type="text" name="search" class="form-control" placeholder="Search by tag number or name..." 
+                       value="{{ request.GET.search }}">
+                <select name="status" class="form-control">
+                    <option value="">All Status</option>
+                    <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Active</option>
+                    <option value="sold" {% if request.GET.status == 'sold' %}selected{% endif %}>Sold</option>
+                    <option value="deceased" {% if request.GET.status == 'deceased' %}selected{% endif %}>Deceased</option>
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Cattle List -->
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tag Number</th>
+                <th>Name</th>
+                <th>Breed</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Age</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cow in cattle %}
+            <tr>
+                <td>{{ cow.tag_number }}</td>
+                <td>{{ cow.name }}</td>
+                <td>{{ cow.breed }}</td>
+                <td>{{ cow.get_gender_display }}</td>
+                <td>
+                    <span class="badge badge-{{ cow.status|yesno:'success,danger' }}">
+                        {{ cow.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ cow.date_of_birth|timesince }}</td>
+                <td>
+                    <a href="{% url 'cattle_detail' cow.pk %}" class="btn btn-sm btn-info">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No cattle found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+{% if cattle.has_other_pages %}
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if cattle.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ cattle.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for num in cattle.paginator.page_range %}
+        <li class="page-item {% if cattle.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        {% if cattle.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ cattle.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

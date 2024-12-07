@@ -1,0 +1,70 @@
+<!-- templates/farm/dashboard.html -->
+{% extends "farm/base.html" %}
+{% load static %}
+
+{% block farm_content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Active Cattle</h5>
+                <h2 class="card-text">{{ total_cattle }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Today's Milk Production</h5>
+                <h2 class="card-text">{{ today_milk }} liters</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent Health Records</h5>
+                <p class="card-text">{{ recent_health_records.count }} new records</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row mt-4">
+    <div class="col-12">
+        <h3>Recent Health Records</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Cattle</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in recent_health_records %}
+                    <tr>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.cattle.name }}</td>
+                        <td>{{ record.get_record_type_display }}</td>
+                        <td>{{ record.description|truncatechars:50 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No recent health records.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

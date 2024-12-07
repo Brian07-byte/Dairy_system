@@ -1,0 +1,133 @@
+<!-- templates/farm/analytics_dashboard.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Dairy Farm Analytics Dashboard</h2>
+    
+    <!-- Summary Cards -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Production</h5>
+                    <p class="card-text">{{ total_production|floatformat:2 }} liters</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Average Daily Production</h5>
+                    <p class="card-text">{{ avg_daily_production|floatformat:2 }} liters</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Production Chart -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Milk Production Trend</h5>
+                    <canvas id="productionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Producing Cattle -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Top Producing Cattle</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Cattle</th>
+                                <th>Total Production</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cattle in top_cattle %}
+                            <tr>
+                                <td>{{ cattle.cattle__name }} ({{ cattle.cattle__tag_number }})</td>
+                                <td>{{ cattle.total_production|floatformat:2 }} L</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Chart initialization
+    const ctx = document.getElementById('productionChart').getContext('2d');
+
+    // Use JSON script for safe data embedding
+    const chartData = JSON.parse('{{ chart_data|safe }}');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.dates,
+            datasets: [
+                {
+                    label: 'Morning',
+                    data: chartData.morning_data,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false
+                }, 
+                {
+                    label: 'Afternoon',
+                    data: chartData.afternoon_data,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    fill: false
+                }, 
+                {
+                    label: 'Evening',
+                    data: chartData.evening_data,
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    fill: false
+                }, 
+                {
+                    label: 'Daily Total',
+                    data: chartData.daily_totals,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Liters'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

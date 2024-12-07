@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Health Records</h2>
+            <a href="{% url 'farm:health_record_add' %}" class="btn btn-primary">Add New Health Record</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {% if health_records %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Cow</th>
+                                <th>Date</th>
+                                <th>Condition</th>
+                                <th>Treatment</th>
+                                <th>Recorded By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in health_records %}
+                            <tr>
+                                <td>{{ record.cow }}</td>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.condition }}</td>
+                                <td>{{ record.treatment }}</td>
+                                <td>{{ record.recorded_by }}</td>
+                                <td>
+                                    <a href="{% url 'farm:health_record_edit' record.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="{% url 'farm:health_record_delete' record.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No health records found.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

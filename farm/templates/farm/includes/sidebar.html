@@ -1,0 +1,191 @@
+<!-- templates/farm/includes/sidebar.html -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="sidebar-sticky pt-3">
+    <ul class="nav flex-column">
+        <!-- Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+               href="{% url 'farm:dashboard' %}">
+                <i class="fas fa-home me-2"></i>
+                Farmers|Dashboard
+            </a>
+        </li>
+
+        <!-- Cattle Management -->
+        <li class="nav-item">
+            <a class="nav-link {% if 'cattle' in request.path %}active{% endif %} dropdown-toggle" 
+               data-bs-toggle="collapse" 
+               href="#cattleSubmenu">
+                <i class="fas fa-cow me-2"></i>
+                Cattle Management
+            </a>
+            <div class="collapse {% if 'cattle' in request.path %}show{% endif %}" id="cattleSubmenu">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:cattle_list' %}">View All Cattle</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:cattle_create' %}">Add New Cattle</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Milk Production -->
+        <li class="nav-item">
+            <a class="nav-link {% if 'milk' in request.path %}active{% endif %} dropdown-toggle" 
+               data-bs-toggle="collapse" 
+               href="#milkSubmenu">
+                <i class="fas fa-milk me-2"></i>
+                Milk Production
+            </a>
+            <div class="collapse {% if 'milk' in request.path %}show{% endif %}" id="milkSubmenu">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:milk_production_list' %}">Production Records</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:milk_production_add' %}">Record Production</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Health Records -->
+        <li class="nav-item">
+            <a class="nav-link {% if 'health' in request.path %}active{% endif %} dropdown-toggle" 
+               data-bs-toggle="collapse" 
+               href="#healthSubmenu">
+                <i class="fas fa-heartbeat me-2"></i>
+                Health Records
+            </a>
+            <div class="collapse {% if 'health' in request.path %}show{% endif %}" id="healthSubmenu">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:health_record_list' %}">View Records</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'farm:health_record_add' %}">Add Record</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- Analytics -->
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}" 
+               href="{% url 'farm:analytics' %}">
+                <i class="fas fa-chart-line me-2"></i>
+                Analytics
+            </a>
+        </li>
+
+        <!-- Activity Logs -->
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'activity_log_list' %}active{% endif %}" 
+               href="{% url 'farm:activity_log_list' %}">
+                <i class="fas fa-history me-2"></i>
+                Activity Logs
+            </a>
+        </li>
+        
+        <!-- Notifications -->
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'notifications_list' %}active{% endif %}" 
+               href="{% url 'farm:notifications_list' %}">
+                <i class="fas fa-bell me-2"></i>
+                Notifications
+            </a>
+        </li>
+
+        <!-- Settings -->
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}" 
+               href="">
+                <i class="fas fa-cog me-2"></i>
+                Settings
+            </a>
+        </li>
+
+        <!-- Profile -->
+        <!-- Profile -->
+<li class="nav-item">
+    <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" 
+       href="">
+        <i class="fas fa-user me-2"></i>
+        Profile
+    </a>
+</li>
+
+<!-- Logout -->
+<li class="nav-item mt-3">
+    <a class="nav-link text-danger" href="{% url 'farm:logout' %}">
+        <i class="fas fa-sign-out-alt me-2"></i>
+        Logout
+    </a>
+</li>
+
+    </ul>
+</div>
+
+<!-- Add this in your base.html head section for Font Awesome icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<!-- Add this CSS to your style.css -->
+<style>
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.nav-link {
+    color: #333;
+    font-weight: 500;
+    padding: .5rem 1rem;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+.nav-link.active {
+    color: #007bff;
+    background-color: rgba(0, 123, 255, .1);
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.collapse {
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle::after {
+    float: right;
+    margin-top: 10px;
+}
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: static;
+        padding-top: 0;
+    }
+}
+</style>

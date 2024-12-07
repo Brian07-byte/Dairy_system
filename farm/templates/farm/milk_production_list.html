@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Milk Production Records</h2>
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {% if milk_records %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Cow</th>
+                                <th>Session</th>
+                                <th>Quantity (L)</th>
+                                <th>Fat Content (%)</th>
+                                <th>Recorded By</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in milk_records %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>{{ record.cattle }}</td>
+                                <td>{{ record.get_milking_session_display }}</td>
+                                <td>{{ record.quantity }}</td>
+                                <td>{{ record.fat_content|default:"-" }}</td>
+                                <td>{{ record.recorded_by }}</td>
+                                <td>{{ record.notes|truncatechars:30 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    <h3>Daily Totals</h3>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Quantity (L)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for total in daily_totals %}
+                            <tr>
+                                <td>{{ total.date }}</td>
+                                <td>{{ total.total_quantity }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No milk production records found.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
