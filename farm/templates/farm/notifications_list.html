@@ -31,12 +31,12 @@
                                 
                                 <div class="btn-group">
                                     {% if not notification.read_at %}
-                                        <form action="{% url 'mark_notification_read' notification.id %}" method="post" class="d-inline mark-read-form" data-notification-id="{{ notification.id }}">
+                                        <form action="" method="post" class="d-inline mark-read-form" data-notification-id="{{ notification.id }}">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-sm btn-success">Mark as Read</button>
                                         </form>
                                     {% endif %}
-                                    <form action="{% url 'delete_notification' notification.id %}" method="post" class="d-inline delete-notification-form" data-notification-id="{{ notification.id }}">
+                                    <form action="" method="post" class="d-inline delete-notification-form" data-notification-id="{{ notification.id }}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                     </form>
@@ -46,7 +46,7 @@
                     </div>
                 {% endfor %}
                 
-                {% include 'farm/includes/pagination.html' with page_obj=notifications %}
+                
             {% else %}
                 <div class="alert alert-info">
                     No notifications to display.
